@@ -1,12 +1,12 @@
-import React from "react";
-import ReactDOMServer from "react-dom/server";
-import App from "./App";
-import indexStyles from "./index.css";
-import appStyles from "./App.css";
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
+import App from './App'
+import indexStyles from './index.css'
+import appStyles from './App.css'
 
-const allStyles = [indexStyles, appStyles];
+const allStyles = [indexStyles, appStyles]
 
-const joined = allStyles.join("");
+const joined = allStyles.join('')
 
 export function render() {
   const html = ReactDOMServer.renderToString(
@@ -18,7 +18,7 @@ export function render() {
         }}
       />
       <App />
-    </React.StrictMode>
-  );
-  return { html };
+    </React.StrictMode>,
+  )
+  return { html }
 }
