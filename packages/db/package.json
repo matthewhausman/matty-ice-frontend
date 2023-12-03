@@ -1,0 +1,15 @@
+{
+  "version": "0.0.0",
+  "name": "@matty-ice-app-template/db",
+  "main": "index.ts",
+  "private": true,
+  "scripts": {},
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.9.0",
+    "@types/pg": "^8.10.9",
+    "drizzle-orm": "^0.29.1",
+    "pg": "^8.11.3",
+    "zod": "^3.22.2"
+  }
+}

@@ -14,7 +14,9 @@
     "frontend:lint": "pnpm --filter @matty-ice-app-template/react-frontend lint",
     "frontend:typecheck": "pnpm --filter @matty-ice-app-template/react-frontend typecheck"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  },
   "dependencies": {},
   "packageManager": "pnpm@8.11.0"
 }
