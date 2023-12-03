@@ -8,9 +8,43 @@ importers:
 
   .:
     devDependencies:
+      eslint:
+        specifier: ^8.55.0
+        version: 8.55.0
+      prettier:
+        specifier: ^3.1.0
+        version: 3.1.0
       typescript:
         specifier: ^5.2.2
         version: 5.3.2
+
+  apps/express:
+    dependencies:
+      compression:
+        specifier: ^1.7.4
+        version: 1.7.4
+      express:
+        specifier: ^4.18.2
+        version: 4.18.2
+      sirv:
+        specifier: ^2.0.3
+        version: 2.0.3
+    devDependencies:
+      '@types/express':
+        specifier: ^4.17.21
+        version: 4.17.21
+      '@types/node':
+        specifier: ^20.9.0
+        version: 20.10.2
+      autoprefixer:
+        specifier: ^10.4.16
+        version: 10.4.16(postcss@8.4.32)
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
+      vite:
+        specifier: ^5.0.0
+        version: 5.0.4(@types/node@20.10.2)
 
   apps/react:
     dependencies:
@@ -51,18 +85,12 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
-      eslint:
-        specifier: ^8.55.0
-        version: 8.55.0
       eslint-config-react-app:
         specifier: ^7.0.1
         version: 7.0.1(@babel/plugin-syntax-flow@7.23.3)(@babel/plugin-transform-react-jsx@7.23.4)(eslint@8.55.0)(typescript@5.3.2)
       postcss:
         specifier: ^8.4.32
         version: 8.4.32
-      prettier:
-        specifier: ^3.1.0
-        version: 3.1.0
       tailwindcss:
         specifier: ^3.3.5
         version: 3.3.5

@@ -15,7 +15,9 @@
     "frontend:typecheck": "pnpm --filter @matty-ice-app-template/react-frontend typecheck"
   },
   "devDependencies": {
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "prettier": "^3.1.0",
+    "eslint": "^8.55.0"
   },
   "dependencies": {},
   "packageManager": "pnpm@8.11.0"
