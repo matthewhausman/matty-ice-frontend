@@ -6,7 +6,9 @@ const port = process.env.PORT || 5174
 // Create http server
 const app = express()
 
-app.use('*', async (req, res) => {})
+export type App = ReturnType<typeof express>
+
+app.get('/cities', (req, res) => {})
 
 // Start http server
 app.listen(port, () => {

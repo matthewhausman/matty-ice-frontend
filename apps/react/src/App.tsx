@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
+import useCities from './queries/cities'
 
 function App() {
   const [count, setCount] = useState(0)
 
-  useEffect(() => {
-    console.log(count)
-  }, [])
-
-  const x = 123
+  // const citiesQuery = useCities()
 
   return (
     <>

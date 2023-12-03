@@ -48,6 +48,12 @@ importers:
 
   apps/react:
     dependencies:
+      '@matty-ice-app-template/db':
+        specifier: '*'
+        version: link:../../packages/db
+      '@tanstack/react-query':
+        specifier: ^5.12.2
+        version: 5.12.2(react@18.2.0)
       compression:
         specifier: ^1.7.4
         version: 1.7.4
@@ -2206,6 +2212,19 @@ packages:
   /@rushstack/eslint-patch@1.6.0:
     resolution: {integrity: sha512-2/U3GXA6YiPYQDLGwtGlnNgKYBSwCFIHf8Y9LUY5VATHdtbLlU0Y1R3QoBnT0aB4qv/BEiVVsj7LJXoQCgJ2vA==}
     dev: true
+
+  /@tanstack/query-core@5.12.1:
+    resolution: {integrity: sha512-WbZztNmKq0t6QjdNmHzezbi/uifYo9j6e2GLJkodsYaYUlzMbAp91RDyeHkIZrm7EfO4wa6Sm5sxJZm5SPlh6w==}
+    dev: false
+
+  /@tanstack/react-query@5.12.2(react@18.2.0):
+    resolution: {integrity: sha512-BeWZu8zVFH20oRc+S/K9ADPgWjEzP/XQCGBNz5IbApUwPQAdwkQYbXODVL5AyAlWiSxhx+P2xlARPBApj2Yrog==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-core': 5.12.1
+      react: 18.2.0
+    dev: false
 
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}

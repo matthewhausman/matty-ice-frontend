@@ -1,5 +1,6 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { Client } from 'pg'
+import { cities } from './tables/cities'
 
 const client = new Client({
   connectionString: 'postgres://user:password@host:port/db',
@@ -14,4 +15,11 @@ const client = new Client({
 //   database: 'db_name',
 // })
 
-export const db = drizzle(client)
+const db = {
+  client,
+  tables: {
+    cities,
+  },
+}
+
+export default db
