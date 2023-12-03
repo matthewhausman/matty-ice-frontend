@@ -8,10 +8,10 @@
     "jsx": "preserve"
   },
   "include": [
-    "vite.config.ts",
-    "src/entry-server.tsx",
-    "src/vite-env.d.ts",
-    "src/App.tsx",
-    "src/App.css"
+    "apps/react/vite.config.ts",
+    "apps/react/src/entry-server.tsx",
+    "apps/react/src/vite-env.d.ts",
+    "apps/react/src/App.tsx",
+    "apps/react/src/App.css"
   ]
 }
