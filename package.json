@@ -12,7 +12,11 @@
     "frontend:build:server": "pnpm --filter @matty-ice-app-template/react-frontend build:server",
     "frontend:preview": "pnpm --filter @matty-ice-app-template/react-frontend preview",
     "frontend:lint": "pnpm --filter @matty-ice-app-template/react-frontend lint",
-    "frontend:typecheck": "pnpm --filter @matty-ice-app-template/react-frontend typecheck"
+    "frontend:typecheck": "pnpm --filter @matty-ice-app-template/react-frontend typecheck",
+    "backend:dev": "pnpm --filter @matty-ice-app-template/express-backend dev",
+    "backend:preview": "pnpm --filter @matty-ice-app-template/express-backend preview",
+    "backend:lint": "pnpm --filter @matty-ice-app-template/express-backend lint",
+    "backend:typecheck": "pnpm --filter @matty-ice-app-template/express-backend typecheck"
   },
   "devDependencies": {
     "typescript": "^5.2.2",

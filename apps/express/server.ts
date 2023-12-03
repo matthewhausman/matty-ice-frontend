@@ -1,7 +1,7 @@
 import express from 'express'
 
 // Constants
-const port = process.env.PORT || 5173
+const port = process.env.PORT || 5174
 
 // Create http server
 const app = express()
