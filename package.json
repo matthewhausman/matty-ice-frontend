@@ -7,12 +7,12 @@
   },
   "scripts": {
     "frontend:dev": "pnpm --filter @matty-ice-app-template/react-frontend dev",
-    "frontend:build": "npm run build:client && npm run build:server",
-    "frontend:build:client": "vite build --ssrManifest --outDir dist/client",
-    "frontend:build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
-    "frontend:preview": "cross-env NODE_ENV=production node server",
-    "frontend:lint": "eslint --max-warnings=0 src",
-    "frontend:typecheck": "tsc"
+    "frontend:build": "pnpm --filter @matty-ice-app-template/react-frontend build",
+    "frontend:build:client": "pnpm --filter @matty-ice-app-template/react-frontend build:client",
+    "frontend:build:server": "pnpm --filter @matty-ice-app-template/react-frontend build:server",
+    "frontend:preview": "pnpm --filter @matty-ice-app-template/react-frontend preview",
+    "frontend:lint": "pnpm --filter @matty-ice-app-template/react-frontend lint",
+    "frontend:typecheck": "pnpm --filter @matty-ice-app-template/react-frontend typecheck"
   },
   "devDependencies": {},
   "dependencies": {},
