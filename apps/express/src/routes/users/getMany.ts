@@ -46,7 +46,7 @@ export function deserialize(cachedString: string) {
 export const validateSearchInput = (
   searcher: Record<string, any>,
   tableName: keyof typeof db._.schema,
-): void => {
+): boolean => {
   const table = db._.schema[tableName]
   const tableColumns = Object.keys(table.columns)
   const searcherKeys = Object.keys(searcher)
@@ -54,13 +54,13 @@ export const validateSearchInput = (
   for (const key of searcherKeys) {
     if (key === 'and' || key === 'not' || key === 'or') {
       for (const s of searcher[key]) {
-        validateSearchInput(s, tableName)
+        const result = validateSearchInput(s, tableName)
+        if (!result) return false
       }
-      return
     }
     const parts = key.split('_')
 
-    if (parts.length > 2) throw Error('Too many parts')
+    if (parts.length > 2) return false
 
     if (tableColumns.includes(parts[0])) {
       // col name is valid
@@ -69,68 +69,82 @@ export const validateSearchInput = (
       switch (parts[1]) {
         case 'eq':
           if (typeof searcher[key] !== col.dataType) {
-            throw Error('Wrong type in filter')
+            return false
           }
           break
         case 'gt':
           if (typeof searcher[key] !== col.dataType) {
-            throw Error('Wrong type in filter')
+            return false
           }
           break
         case 'gte':
           if (typeof searcher[key] !== col.dataType) {
-            throw Error('Wrong type in filter')
+            return false
           }
           break
         case 'lt':
           if (typeof searcher[key] !== col.dataType) {
-            throw Error('Wrong type in filter')
+            return false
           }
           break
         case 'lte':
           if (typeof searcher[key] !== col.dataType) {
-            throw Error('Wrong type in filter')
+            return false
           }
           break
         case 'inArray':
           if (!Array.isArray(searcher[key])) {
-            throw Error('Wrong type in filter')
+            return false
           }
           for (const d of searcher[key]) {
             if (typeof d !== col.dataType) {
-              throw Error('Wrong type in filter')
+              return false
             }
           }
           break
         case 'notInArray':
           if (!Array.isArray(searcher[key])) {
-            throw Error('Wrong type in filter')
+            return false
           }
           for (const d of searcher[key]) {
             if (typeof d !== col.dataType) {
-              throw Error('Wrong type in filter')
+              return false
             }
           }
           break
         case 'isNull':
+          if (typeof searcher[key] !== 'boolean') {
+            return false
+          }
           break
         case 'isNotNull':
+          if (typeof searcher[key] !== 'boolean') {
+            return false
+          }
           break
         case 'asc':
+          if (typeof searcher[key] !== 'boolean') {
+            return false
+          }
           break
         case 'desc':
+          if (typeof searcher[key] !== 'boolean') {
+            return false
+          }
           break
         default:
-          throw Error('No match found prior to separator')
+          return false
       }
     } else if ('with' === parts[0]) {
       if (!db._.schema[tableName].relations[parts[1]]) {
-        throw Error(`key invalid after separator (with: ${parts[1]})`)
+        return false
       }
-
-      validateSearchInput(searcher[key], parts[1] as any)
+      const result = validateSearchInput(searcher[key], parts[1] as any)
+      if (!result) return false
     }
   }
+
+  return true
 }
 
 export const getManyUsers: RequestHandler = async (req, res) => {
