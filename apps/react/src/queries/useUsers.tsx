@@ -8,8 +8,7 @@ export default function useUsers(vars: Omit<UsersSearcher, 'offset'>) {
     queryKey: ['users', vars] as const,
     queryFn: async ({ queryKey }) => {
       const usersSearcher = queryKey[1]
-      // console.log(import.meta.env.VITE_API_URL)
-      // console.log(process.env.API_URL)
+
       const url = new URL(
         `${import.meta.env.VITE_API_URL}/users?q=${encodeURIComponent(
           JSON.stringify(usersSearcher),
@@ -18,7 +17,6 @@ export default function useUsers(vars: Omit<UsersSearcher, 'offset'>) {
 
       await fetch(url.toString(), {
         method: 'GET',
-        // body: JSON.stringify(usersSearcher),
         headers: {
           'Content-Type': 'application/json',
         },

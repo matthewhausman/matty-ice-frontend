@@ -1,10 +1,10 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
-import { Pool } from 'pg'
+import pg from 'pg'
 import { integer, pgTable, serial, text } from 'drizzle-orm/pg-core'
 import { InferSelectModel, relations } from 'drizzle-orm'
 import { GenerateSearcher } from './types'
 
-const pool = new Pool({
+const pool = new pg.Pool({
   host: '127.0.0.1',
   port: 5432,
   user: 'postgres',
@@ -40,18 +40,23 @@ export type UsersSearcher = GenerateSearcher<typeof users>
 
 export type User = InferSelectModel<typeof users>
 
-const obj: UsersSearcher = {
-  id_asc: true,
-  name_desc: true,
-  id_eq: 12345,
-  id_gt: 123,
-  or: [{ id_gt: 1000 }, { and: [{ id_eq: 123 }, { id_inArray: [1, 23, 34] }] }],
-  with_posts: {
-    or: [
-      { id_gt: 1000 },
-      { and: [{ id_eq: 123 }, { id_inArray: [1, 23, 34] }] },
-    ],
-  },
-  limit: 20,
-  offset: 40,
+export const validateSearchInput = (
+  searcher: Record<string, any>,
+  tableName: keyof typeof db._.schema,
+) => {
+  const keys = Object.keys(searcher)
+  const allowedKeys = Object.keys(db._.schema[tableName])
+  allowedKeys.push('with')
+
+  for (const key of keys) {
+    const parts = key.split('_')
+    if (!allowedKeys.includes(parts[0])) {
+      throw Error(`key invalid prior to separator (${parts[0]})`)
+    }
+    if (parts[0] === 'with') {
+      if (!db._.schema[tableName].relations[parts[1]]) {
+        throw Error(`key invalid after separator (with: ${parts[1]})`)
+      }
+    }
+  }
 }

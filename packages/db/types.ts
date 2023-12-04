@@ -8,7 +8,7 @@ export type Prettify<T> = {
 
 type DBQuery = typeof db.query
 
-type MyTable = Table & { _: Table['_'] & { name: keyof DBQuery } }
+export type MyTable = Table & { _: Table['_'] & { name: keyof DBQuery } }
 
 type BinaryFilters<
   T extends MyTable,
