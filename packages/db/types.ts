@@ -16,21 +16,6 @@ type BinaryFilters<
 > = {
   [Column in keyof Columns as `${string &
     Column}_eq`]?: Columns[Column]['_']['data']
-
-  // [Column in keyof Columns]?: {
-  //   eq?: Columns[Column]['_']['data']
-  //   gt?: Columns[Column]['_']['data']
-  //   gte?: Columns[Column]['_']['data']
-  //   lt?: Columns[Column]['_']['data']
-  //   lte?: Columns[Column]['_']['data']
-  //   ne?: Columns[Column]['_']['data']
-  //   inArray?: Columns[Column]['_']['data'][]
-  //   notInArray?: Columns[Column]['_']['data'][]
-  //   isNull?: boolean
-  //   isNotNull?: boolean
-  //   asc?: boolean
-  //   desc?: boolean
-  // }
 } & {
   [Column in keyof Columns as `${string &
     Column}_gt`]?: Columns[Column]['_']['data']
