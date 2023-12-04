@@ -1,9 +1,9 @@
 import type { RequestHandler } from 'express'
+import { UsersSearcher } from '@matty-ice-app-template/db/index'
 import {
   deserialize,
   validateSearchInput,
-  UsersSearcher,
-} from '@matty-ice-app-template/db/index'
+} from '../../utils/validateSearchInput'
 
 export const getManyUsers: RequestHandler = async (req, res) => {
   if (typeof req.query.q !== 'string') return
