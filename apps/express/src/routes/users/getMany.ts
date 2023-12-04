@@ -52,12 +52,22 @@ export const validateSearchInput = (
   const searcherKeys = Object.keys(searcher)
 
   for (const key of searcherKeys) {
+    console.log(key)
     if (key === 'and' || key === 'not' || key === 'or') {
       for (const s of searcher[key]) {
         const result = validateSearchInput(s, tableName)
         if (!result) return false
       }
+      continue
     }
+    if (key === 'limit' || key === 'offset') {
+      if (typeof searcher[key] !== 'number') {
+        return false
+      } else {
+        continue
+      }
+    }
+
     const parts = key.split('_')
 
     if (parts.length > 2) return false
@@ -141,6 +151,8 @@ export const validateSearchInput = (
       }
       const result = validateSearchInput(searcher[key], parts[1] as any)
       if (!result) return false
+    } else {
+      return false
     }
   }
 
@@ -151,7 +163,9 @@ export const getManyUsers: RequestHandler = async (req, res) => {
   if (typeof req.query.q !== 'string') return
 
   try {
-    validateSearchInput(deserialize(req.query.q), 'users')
+    const valid = validateSearchInput(deserialize(req.query.q), 'users')
+    console.log(valid)
+    if (!valid) res.status(422).send()
   } catch (e) {
     console.error(e)
     res.status(422).send()
