@@ -1,5 +1,5 @@
 import express from 'express'
-import { getMany } from './routes/users/getMany'
+import { getManyUsers } from './routes/users/getMany'
 // Constants
 import cors from 'cors'
 const port = process.env.PORT || 5174
@@ -21,4 +21,4 @@ app.use(
   }),
 )
 
-app.get('/users', getMany)
+app.get('/users', getManyUsers)

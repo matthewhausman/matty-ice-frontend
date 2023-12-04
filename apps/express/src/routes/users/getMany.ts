@@ -1,7 +1,14 @@
 import type { RequestHandler } from 'express'
-import { db } from '@matty-ice-app-template/db'
+import { UsersSearcher } from '@matty-ice-app-template/db'
+import { z } from 'zod'
 
-export const getMany: RequestHandler = async (req, res) => {
+// const genSchema = <T extends Record<string, any>>(args: T) => void
+// const schema = z.object({
+
+// }) satisfies z.ZodType<UsersSearcher>
+
+export const getManyUsers: RequestHandler = async (req, res) => {
+  console.log(req.query)
   res.status(200).send([])
   return
 }
