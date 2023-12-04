@@ -48,10 +48,11 @@ export const validateSearchInput = (
   tableName: keyof typeof db._.schema,
 ): void => {
   const table = db._.schema[tableName]
-  const tableColumns = Object.keys(table)
+  const tableColumns = Object.keys(table.columns)
   const searcherKeys = Object.keys(searcher)
 
   for (const key of searcherKeys) {
+    console.log(key)
     if (key === 'and' || key === 'not' || key === 'or') {
       for (const s of searcher[key]) {
         validateSearchInput(s, tableName)
@@ -59,6 +60,7 @@ export const validateSearchInput = (
       return
     }
     const parts = key.split('_')
+    console.log(parts)
 
     if (parts.length > 2) throw Error('Too many parts')
 
@@ -67,6 +69,7 @@ export const validateSearchInput = (
       switch (parts[1]) {
         case 'eq':
           const col = table.columns[parts[0]]
+          console.log(key, searcher[key])
           if (typeof searcher[key] !== col.dataType) {
             throw Error('Wrong type in filter')
           }
