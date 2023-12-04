@@ -2,7 +2,7 @@ import { ExtractTableRelationsFromSchema, Table } from 'drizzle-orm'
 import { PgColumn } from 'drizzle-orm/pg-core'
 import { db, schema } from './index'
 
-type Prettify<T> = {
+export type Prettify<T> = {
   [K in keyof T]: T[K]
 } & {}
 
@@ -83,4 +83,7 @@ export type GenerateSearcher<
     : never]?: Schema[Key] extends MyTable
     ? GenerateSearcher<Schema[Key]> | boolean
     : never
+} & {
+  limit?: number
+  offset?: number
 }

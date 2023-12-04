@@ -45,4 +45,6 @@ const obj: T = {
   id_lt: 120,
   or: [{ id_gt: 12, id_notInArray: [1, 2] }],
   with_posts: true,
+  limit: 20,
+  offset: 40,
 }
