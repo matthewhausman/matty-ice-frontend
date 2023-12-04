@@ -52,7 +52,6 @@ export const validateSearchInput = (
   const searcherKeys = Object.keys(searcher)
 
   for (const key of searcherKeys) {
-    console.log(key)
     if (key === 'and' || key === 'not' || key === 'or') {
       for (const s of searcher[key]) {
         validateSearchInput(s, tableName)
@@ -60,31 +59,58 @@ export const validateSearchInput = (
       return
     }
     const parts = key.split('_')
-    console.log(parts)
 
     if (parts.length > 2) throw Error('Too many parts')
 
     if (tableColumns.includes(parts[0])) {
       // col name is valid
+      const col = table.columns[parts[0]]
+
       switch (parts[1]) {
         case 'eq':
-          const col = table.columns[parts[0]]
-          console.log(key, searcher[key])
           if (typeof searcher[key] !== col.dataType) {
             throw Error('Wrong type in filter')
           }
           break
         case 'gt':
+          if (typeof searcher[key] !== col.dataType) {
+            throw Error('Wrong type in filter')
+          }
           break
         case 'gte':
+          if (typeof searcher[key] !== col.dataType) {
+            throw Error('Wrong type in filter')
+          }
           break
         case 'lt':
+          if (typeof searcher[key] !== col.dataType) {
+            throw Error('Wrong type in filter')
+          }
           break
         case 'lte':
+          if (typeof searcher[key] !== col.dataType) {
+            throw Error('Wrong type in filter')
+          }
           break
         case 'inArray':
+          if (!Array.isArray(searcher[key])) {
+            throw Error('Wrong type in filter')
+          }
+          for (const d of searcher[key]) {
+            if (typeof d !== col.dataType) {
+              throw Error('Wrong type in filter')
+            }
+          }
           break
         case 'notInArray':
+          if (!Array.isArray(searcher[key])) {
+            throw Error('Wrong type in filter')
+          }
+          for (const d of searcher[key]) {
+            if (typeof d !== col.dataType) {
+              throw Error('Wrong type in filter')
+            }
+          }
           break
         case 'isNull':
           break
@@ -114,7 +140,9 @@ export const getManyUsers: RequestHandler = async (req, res) => {
     validateSearchInput(deserialize(req.query.q), 'users')
   } catch (e) {
     console.error(e)
+    res.status(422).send()
   }
+
   res.status(200).send([])
   return
 }

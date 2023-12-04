@@ -62,7 +62,6 @@ export const validateSearchInput = (
       switch (parts[1]) {
         case 'eq':
           const col = table.columns[parts[0]]
-          console.log(col)
           if (typeof searcher[key] !== col.dataType) {
             throw Error('Wrong type in filter')
           }
