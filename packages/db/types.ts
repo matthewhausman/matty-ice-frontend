@@ -15,36 +15,36 @@ type BinaryFilters<
   Columns extends Record<string, PgColumn> = T['_']['columns'],
 > = {
   [Column in keyof Columns as `${string &
-    Column}_eq`]?: Columns[Column]['_']['data']
+    Column}:eq`]?: Columns[Column]['_']['data']
 } & {
   [Column in keyof Columns as `${string &
-    Column}_gt`]?: Columns[Column]['_']['data']
+    Column}:gt`]?: Columns[Column]['_']['data']
 } & {
   [Column in keyof Columns as `${string &
-    Column}_gte`]?: Columns[Column]['_']['data']
+    Column}:gte`]?: Columns[Column]['_']['data']
 } & {
   [Column in keyof Columns as `${string &
-    Column}_lt`]?: Columns[Column]['_']['data']
+    Column}:lt`]?: Columns[Column]['_']['data']
 } & {
   [Column in keyof Columns as `${string &
-    Column}_lte`]?: Columns[Column]['_']['data']
+    Column}:lte`]?: Columns[Column]['_']['data']
 } & {
   [Column in keyof Columns as `${string &
-    Column}_ne`]?: Columns[Column]['_']['data']
+    Column}:ne`]?: Columns[Column]['_']['data']
 } & {
   [Column in keyof Columns as `${string &
-    Column}_inArray`]?: Columns[Column]['_']['data']
+    Column}:inArray`]?: Columns[Column]['_']['data']
 } & {
   [Column in keyof Columns as `${string &
-    Column}_notInArray`]?: Columns[Column]['_']['data']
+    Column}:notInArray`]?: Columns[Column]['_']['data']
 } & {
-  [Column in keyof Columns as `${string & Column}_isNull`]?: boolean
+  [Column in keyof Columns as `${string & Column}:isNull`]?: boolean
 } & {
-  [Column in keyof Columns as `${string & Column}_isNotNull`]?: boolean
+  [Column in keyof Columns as `${string & Column}:isNotNull`]?: boolean
 } & {
-  [Column in keyof Columns as `${string & Column}_asc`]?: boolean
+  [Column in keyof Columns as `${string & Column}:asc`]?: boolean
 } & {
-  [Column in keyof Columns as `${string & Column}_desc`]?: boolean
+  [Column in keyof Columns as `${string & Column}:desc`]?: boolean
 }
 
 type AndOrFilters<T extends MyTable> = {
@@ -71,11 +71,16 @@ export type GenerateSearcher<
   T extends MyTable,
   R = ExtractTableRelationsFromSchema<Schema, T['_']['name']>,
 > = AndOrMetaFilters<T> & {
-  with?: {
-    [Key in keyof Schema as Key extends keyof R
-      ? Key
-      : never]: Schema[Key] extends MyTable
-      ? GenerateSearcher<Schema[Key]>
-      : never
-  }
+  // with?: {
+  //   [Key in keyof Schema as Key extends keyof R
+  //     ? Key
+  //     : never]: Schema[Key] extends MyTable
+  //     ? GenerateSearcher<Schema[Key]>
+  //     : never
+  // }
+  [Key in keyof Schema as Key extends keyof R
+    ? `with:${string & Key}`
+    : never]?: Schema[Key] extends MyTable
+    ? GenerateSearcher<Schema[Key]> | boolean
+    : never
 }
