@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { Pool } from 'pg'
 import { integer, pgTable, serial, text } from 'drizzle-orm/pg-core'
-import { ExtractTableRelationsFromSchema, relations } from 'drizzle-orm'
+import { relations } from 'drizzle-orm'
 import { GenerateSearcher } from './types'
 
 const pool = new Pool({
@@ -41,13 +41,18 @@ type T = GenerateSearcher<typeof users>
 const obj: T = {
   name: {
     eq: 'matthew',
+    ne: 'm',
+    not: {
+      eq: 'matt',
+    },
   },
   with: {
     posts: {
       authorId: {
-        // eq,
+        eq: 123,
       },
     },
   },
   and: [],
+  or: [],
 }

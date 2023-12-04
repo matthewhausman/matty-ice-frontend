@@ -14,20 +14,52 @@ type BinaryFilters<
   T extends MyTable,
   Columns extends Record<string, PgColumn> = T['_']['columns'],
 > = {
-  [Column in keyof Columns]?: {
-    eq?: Columns[Column]['_']['data']
-    gt?: Columns[Column]['_']['data']
-    gte?: Columns[Column]['_']['data']
-    lt?: Columns[Column]['_']['data']
-    lte?: Columns[Column]['_']['data']
-    ne?: Columns[Column]['_']['data']
-    inArray?: Columns[Column]['_']['data'][]
-    notInArray?: Columns[Column]['_']['data'][]
-    isNull?: boolean
-    isNotNull?: boolean
-    asc?: boolean
-    desc?: boolean
-  }
+  [Column in keyof Columns as `${string &
+    Column}_eq`]?: Columns[Column]['_']['data']
+
+  // [Column in keyof Columns]?: {
+  //   eq?: Columns[Column]['_']['data']
+  //   gt?: Columns[Column]['_']['data']
+  //   gte?: Columns[Column]['_']['data']
+  //   lt?: Columns[Column]['_']['data']
+  //   lte?: Columns[Column]['_']['data']
+  //   ne?: Columns[Column]['_']['data']
+  //   inArray?: Columns[Column]['_']['data'][]
+  //   notInArray?: Columns[Column]['_']['data'][]
+  //   isNull?: boolean
+  //   isNotNull?: boolean
+  //   asc?: boolean
+  //   desc?: boolean
+  // }
+} & {
+  [Column in keyof Columns as `${string &
+    Column}_gt`]?: Columns[Column]['_']['data']
+} & {
+  [Column in keyof Columns as `${string &
+    Column}_gte`]?: Columns[Column]['_']['data']
+} & {
+  [Column in keyof Columns as `${string &
+    Column}_lt`]?: Columns[Column]['_']['data']
+} & {
+  [Column in keyof Columns as `${string &
+    Column}_lte`]?: Columns[Column]['_']['data']
+} & {
+  [Column in keyof Columns as `${string &
+    Column}_ne`]?: Columns[Column]['_']['data']
+} & {
+  [Column in keyof Columns as `${string &
+    Column}_inArray`]?: Columns[Column]['_']['data']
+} & {
+  [Column in keyof Columns as `${string &
+    Column}_notInArray`]?: Columns[Column]['_']['data']
+} & {
+  [Column in keyof Columns as `${string & Column}_isNull`]?: boolean
+} & {
+  [Column in keyof Columns as `${string & Column}_isNotNull`]?: boolean
+} & {
+  [Column in keyof Columns as `${string & Column}_asc`]?: boolean
+} & {
+  [Column in keyof Columns as `${string & Column}_desc`]?: boolean
 }
 
 type AndOrFilters<T extends MyTable> = {
