@@ -1,22 +1,8 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { Pool } from 'pg'
-import { integer, jsonb, pgTable, serial, text } from 'drizzle-orm/pg-core'
+import { integer, pgTable, serial, text } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
-
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  name: text('name'),
-})
-
-export const usersRelations = relations(users, ({ one }) => ({
-  profileInfo: one(profileInfo),
-}))
-
-export const profileInfo = pgTable('profile_info', {
-  id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),
-  metadata: jsonb('metadata'),
-})
+import { GenerateSearcher } from './types'
 
 const pool = new Pool({
   host: '127.0.0.1',
@@ -26,6 +12,32 @@ const pool = new Pool({
   database: 'db_name',
 })
 
-const db = drizzle(pool, { schema: { users, profileInfo } })
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+})
 
-export default db
+export const usersRelations = relations(users, ({ many }) => ({
+  posts: many(posts),
+}))
+
+export const posts = pgTable('posts', {
+  id: serial('id').primaryKey(),
+  content: text('content').notNull(),
+  authorId: integer('author_id').notNull(),
+})
+export const postsRelations = relations(posts, ({ one }) => ({
+  author: one(users, { fields: [posts.authorId], references: [users.id] }),
+}))
+
+export const db = drizzle(pool, {
+  schema: { users, posts, usersRelations, postsRelations },
+})
+
+type T = GenerateSearcher<typeof users>
+
+const obj: T = {
+  with: {
+    posts: true,
+  },
+}

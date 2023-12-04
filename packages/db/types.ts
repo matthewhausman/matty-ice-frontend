@@ -1,6 +1,6 @@
 import { Table } from 'drizzle-orm'
 import { PgColumn } from 'drizzle-orm/pg-core'
-import { db } from './tables/cities'
+import { db } from './index'
 
 type Prettify<T> = {
   [K in keyof T]: T[K]
@@ -50,5 +50,10 @@ type AndOrMetaFilters<T extends MyTable> = Prettify<NotFilter<T>> & {
 }
 
 export type GenerateSearcher<T extends MyTable> = AndOrMetaFilters<T> & {
-  with?: Parameters<DBQuery[T['_']['name']]['findMany']>[0]
+  // with?: Parameters<DBQuery[T['_']['name']]['findMany']>[0]['with']
+  with?: {
+    [Key in keyof Parameters<
+      DBQuery[T['_']['name']]['findMany']
+    >[0]['with']]: boolean
+  }
 }
