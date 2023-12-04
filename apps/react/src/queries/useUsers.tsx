@@ -8,11 +8,11 @@ export default function useUsers(vars: Omit<UsersSearcher, 'offset'>) {
     queryKey: ['users', vars] as const,
     queryFn: async ({ queryKey }) => {
       const usersSearcher = queryKey[1]
-      // console.log(import.meta.env.MODE)
+      // console.log(import.meta.env.VITE_API_URL)
       // console.log(process.env.API_URL)
-      // await fetch(process.env.API_URL ?? '', {
-      //   method: 'GET',
-      // })
+      await fetch(`${import.meta.env.VITE_API_URL}/users` ?? '', {
+        method: 'GET',
+      })
       return { data: [{ id: 2, name: '123' }], total: 100 } as {
         data: User[]
         total: number

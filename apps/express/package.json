@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npx tsx server",
+    "dev": "npx tsx src/server",
     "preview": "cross-env NODE_ENV=production node server",
     "lint": "eslint --max-warnings=0 src",
     "typecheck": "tsc"

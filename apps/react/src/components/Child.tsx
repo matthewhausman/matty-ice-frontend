@@ -1,6 +1,6 @@
 'use client'
 
-import useUsers from '../queries/users'
+import useUsers from '../queries/useUsers'
 
 export default function Child() {
   const usersQuery = useUsers({ with_posts: true })
