@@ -72,14 +72,7 @@ type Schema = typeof schema
 export type GenerateSearcher<
   T extends MyTable,
   R = ExtractTableRelationsFromSchema<Schema, T['_']['name']>,
-> = AndOrFilters<T> & {
-  // with?: {
-  //   [Key in keyof Schema as Key extends keyof R
-  //     ? Key
-  //     : never]: Schema[Key] extends MyTable
-  //     ? GenerateSearcher<Schema[Key]>
-  //     : never
-  // }
+> = AndOrMetaFilters<T> & {
   [Key in keyof Schema as Key extends keyof R
     ? `with_${string & Key}`
     : never]?: Schema[Key] extends MyTable
