@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import App from './App'
-import indexStyles from './index.css'
-import appStyles from './App.css'
+import indexStyles from './index.scss'
+import appStyles from './App.scss'
 
 const allStyles = [indexStyles, appStyles]
 

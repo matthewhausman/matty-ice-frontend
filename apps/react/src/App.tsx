@@ -1,12 +1,30 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import './App.css'
-import useCities from './queries/cities'
+import './App.scss'
+import useUsers from './queries/users'
 
 function App() {
   const [count, setCount] = useState(0)
 
-  // const citiesQuery = useCities()
+  const usersQuery = useUsers({ with_posts: true })
+  const usersQuery2 = useUsers({
+    id_asc: true,
+    name_desc: true,
+    id_eq: 12345,
+    id_gt: 123,
+    or: [
+      { id_gt: 1000 },
+      { and: [{ id_eq: 123 }, { id_inArray: [1, 23, 34] }] },
+    ],
+    with_posts: {
+      or: [
+        { id_gt: 1000 },
+        { and: [{ id_eq: 123 }, { id_inArray: [1, 23, 34] }] },
+      ],
+    },
+    limit: 20,
+    offset: 40,
+  })
 
   return (
     <>

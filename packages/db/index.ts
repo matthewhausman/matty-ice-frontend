@@ -36,9 +36,9 @@ export const db = drizzle(pool, {
   schema,
 } as const)
 
-type T = GenerateSearcher<typeof users>
+export type UsersSearcher = GenerateSearcher<typeof users>
 
-const obj: T = {
+const obj: UsersSearcher = {
   id_asc: true,
   name_desc: true,
   id_eq: 12345,
