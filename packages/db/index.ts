@@ -39,5 +39,7 @@ export const db = drizzle(pool, {
 type T = GenerateSearcher<typeof users>
 
 const obj: T = {
-  'with:posts': true,
+  id_asc: true,
+  name_desc: true,
+  id_eq: 12345,
 }
