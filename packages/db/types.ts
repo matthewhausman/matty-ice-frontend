@@ -63,6 +63,7 @@ export type Schema = typeof schema
 
 export type GenerateSearcher<
   T extends MyTable,
+  Columns extends Record<string, PgColumn> = T['_']['columns'],
   R = ExtractTableRelationsFromSchema<Schema, T['_']['name']>,
 > = Prettify<
   AndOrMetaFilters<T> & {
@@ -74,6 +75,9 @@ export type GenerateSearcher<
   } & {
     limit?: number
     offset?: number
+    columns?: {
+      [K in keyof Columns]: boolean
+    }
   }
 >
 
