@@ -1,12 +1,8 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import App from './App'
-import indexStyles from './index.scss'
-import appStyles from './App.scss'
-
-const allStyles = [indexStyles, appStyles]
-
-const joined = allStyles.join('')
+import one from './App.css?inline'
+import two from './index.css?inline'
 
 export function render() {
   const html = ReactDOMServer.renderToString(
@@ -14,7 +10,7 @@ export function render() {
       <style
         key="matty-ice-css"
         dangerouslySetInnerHTML={{
-          __html: joined,
+          __html: [one, two].join('\n'),
         }}
       />
       <App />
