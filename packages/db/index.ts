@@ -91,7 +91,6 @@ export const validateSearchInput = (
   const searcherKeys = Object.keys(searcher)
 
   for (const key of searcherKeys) {
-    console.log(key)
     if (key === 'and' || key === 'not' || key === 'or') {
       for (const s of searcher[key]) {
         const result = validateSearchInput(s, tableName)
