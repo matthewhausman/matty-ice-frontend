@@ -47,30 +47,32 @@ type BinaryFilters<
   [Column in keyof Columns as `${string & Column}_desc`]?: boolean
 }
 
-type AndOrFilters<T extends MyTable> = {
-  [Key in keyof BinaryFilters<T>]?:
-    | BinaryFilters<T>[Key]
-    | {
-        and?: BinaryFilters<T>[Key][]
-        or?: BinaryFilters<T>[Key][]
-      }
-}
+// type AndOrFilters<T extends MyTable> = {
+//   [Key in keyof BinaryFilters<T>]?:
+//     | BinaryFilters<T>[Key]
+//     | {
+//         and?: BinaryFilters<T>[Key][]
+//         or?: BinaryFilters<T>[Key][]
+//       }
+// }
+
+// type NotFilter<T extends MyTable, PrevFilter = AndOrFilters<T>> = {
+//   [Key in keyof PrevFilter]?:
+//     | PrevFilter[Key]
+//     | {
+//         not?: PrevFilter[Key]
+//       }
+// }
+
+type BinaryFiltersWithAnd = {}
 
 type AndOrMetaFilters<
   T extends MyTable,
-  PrevFilter = AndOrFilters<T>,
+  PrevFilter = BinaryFilters<T>,
 > = PrevFilter & {
-  and?: PrevFilter[]
-  or?: PrevFilter[]
+  and?: Omit<AndOrMetaFilters<T>, 'and'>[]
+  or?: Omit<AndOrMetaFilters<T>, 'or'>[]
 }
-
-// type NotFilter<T extends MyTable, PrevFilter = AndOrMetaFilters<T>> = {
-//   [Key in keyof PrevFilter]?: PrevFilter[Key] & {
-//     not?: PrevFilter[Key]
-//   }
-// } & {
-//   not?: PrevFilter
-// }
 
 type Schema = typeof schema
 
