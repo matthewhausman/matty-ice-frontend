@@ -49,14 +49,50 @@ export const validateSearchInput = (
   allowedKeys.push('with')
 
   for (const key of keys) {
+    if (key === 'and' || key === 'not' || key === 'or') {
+      validateSearchInput(searcher[key], tableName)
+      return
+    }
     const parts = key.split('_')
+
+    if (parts.length > 2) throw Error('too many parts')
+
     if (!allowedKeys.includes(parts[0])) {
       throw Error(`key invalid prior to separator (${parts[0]})`)
     }
-    if (parts[0] === 'with') {
-      if (!db._.schema[tableName].relations[parts[1]]) {
-        throw Error(`key invalid after separator (with: ${parts[1]})`)
-      }
+
+    switch (parts[0]) {
+      case 'eq':
+        break
+      case 'gt':
+        break
+      case 'gte':
+        break
+      case 'lt':
+        break
+      case 'lte':
+        break
+      case 'inArray':
+        break
+      case 'notInArray':
+        break
+      case 'isNull':
+        break
+      case 'isNotNull':
+        break
+      case 'asc':
+        break
+      case 'desc':
+        break
+      case 'with':
+        if (!db._.schema[tableName].relations[parts[1]]) {
+          throw Error(`key invalid after separator (with: ${parts[1]})`)
+        }
+        break
+      default:
+        throw Error('No match found prior to separator')
     }
+
+    validateSearchInput(searcher[key], tableName)
   }
 }
