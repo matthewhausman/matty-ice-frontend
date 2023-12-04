@@ -60,6 +60,5 @@ export type GenerateSearcher<
       : never]: Schema[Key] extends MyTable
       ? GenerateSearcher<Schema[Key]>
       : never
-    // [Key in keyof R]: (typeof schema)[Key]
   }
 }
