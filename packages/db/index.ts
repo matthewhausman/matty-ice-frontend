@@ -30,14 +30,22 @@ export const postsRelations = relations(posts, ({ one }) => ({
   author: one(users, { fields: [posts.authorId], references: [users.id] }),
 }))
 
+export const schema = { users, posts, usersRelations, postsRelations } as const
+
 export const db = drizzle(pool, {
-  schema: { users, posts, usersRelations, postsRelations },
+  schema,
+})
+
+db.query.users.findMany({
+  with: {
+    posts: {
+      // w,
+    },
+  },
 })
 
 type T = GenerateSearcher<typeof users>
 
 const obj: T = {
-  with: {
-    posts: true,
-  },
+  with: {},
 }

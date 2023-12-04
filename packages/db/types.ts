@@ -1,6 +1,6 @@
 import { Table } from 'drizzle-orm'
 import { PgColumn } from 'drizzle-orm/pg-core'
-import { db } from './index'
+import { db, schema } from './index'
 
 type Prettify<T> = {
   [K in keyof T]: T[K]
@@ -8,7 +8,6 @@ type Prettify<T> = {
 
 type DBQuery = typeof db.query
 
-type L = keyof DBQuery
 type MyTable = Table & { _: Table['_'] & { name: keyof DBQuery } }
 
 type BinaryFilters<
@@ -49,11 +48,14 @@ type AndOrMetaFilters<T extends MyTable> = Prettify<NotFilter<T>> & {
   or?: Prettify<NotFilter<T>>[]
 }
 
+type T = typeof db._.schema
+
+type F = keyof Parameters<DBQuery['users']['findMany']>[0]['with']
+
 export type GenerateSearcher<T extends MyTable> = AndOrMetaFilters<T> & {
-  // with?: Parameters<DBQuery[T['_']['name']]['findMany']>[0]['with']
   with?: {
     [Key in keyof Parameters<
-      DBQuery[T['_']['name']]['findMany']
+      (typeof db.query)[T['_']['name']]['findMany']
     >[0]['with']]: boolean
   }
 }
