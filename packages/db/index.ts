@@ -36,14 +36,18 @@ export const db = drizzle(pool, {
   schema,
 } as const)
 
-type F = (typeof db._.schema.posts.relations)['author']
-
-// type T = ExtractTableRelationsFromSchema<typeof db._.tableNamesMap, 'users'>
-
 type T = GenerateSearcher<typeof users>
 
 const obj: T = {
-  with: {
-    posts: {},
+  name: {
+    eq: 'matthew',
   },
+  with: {
+    posts: {
+      authorId: {
+        // eq,
+      },
+    },
+  },
+  and: [],
 }
