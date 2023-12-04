@@ -1,4 +1,4 @@
-import { Table } from 'drizzle-orm'
+import { ExtractTableRelationsFromSchema, Table } from 'drizzle-orm'
 import { PgColumn } from 'drizzle-orm/pg-core'
 import { db, schema } from './index'
 
@@ -48,14 +48,18 @@ type AndOrMetaFilters<T extends MyTable> = Prettify<NotFilter<T>> & {
   or?: Prettify<NotFilter<T>>[]
 }
 
-type T = typeof db._.schema
+type Schema = typeof schema
 
-type F = keyof Parameters<DBQuery['users']['findMany']>[0]['with']
-
-export type GenerateSearcher<T extends MyTable> = AndOrMetaFilters<T> & {
+export type GenerateSearcher<
+  T extends MyTable,
+  R = ExtractTableRelationsFromSchema<Schema, T['_']['name']>,
+> = AndOrMetaFilters<T> & {
   with?: {
-    [Key in keyof Parameters<
-      (typeof db.query)[T['_']['name']]['findMany']
-    >[0]['with']]: boolean
+    [Key in keyof Schema as Key extends keyof R
+      ? Key
+      : never]: Schema[Key] extends MyTable
+      ? GenerateSearcher<Schema[Key]>
+      : never
+    // [Key in keyof R]: (typeof schema)[Key]
   }
 }

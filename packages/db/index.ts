@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { Pool } from 'pg'
 import { integer, pgTable, serial, text } from 'drizzle-orm/pg-core'
-import { relations } from 'drizzle-orm'
+import { ExtractTableRelationsFromSchema, relations } from 'drizzle-orm'
 import { GenerateSearcher } from './types'
 
 const pool = new Pool({
@@ -34,18 +34,16 @@ export const schema = { users, posts, usersRelations, postsRelations } as const
 
 export const db = drizzle(pool, {
   schema,
-})
+} as const)
 
-db.query.users.findMany({
-  with: {
-    posts: {
-      // w,
-    },
-  },
-})
+type F = (typeof db._.schema.posts.relations)['author']
+
+// type T = ExtractTableRelationsFromSchema<typeof db._.tableNamesMap, 'users'>
 
 type T = GenerateSearcher<typeof users>
 
 const obj: T = {
-  with: {},
+  with: {
+    posts: {},
+  },
 }
