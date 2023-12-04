@@ -42,4 +42,7 @@ const obj: T = {
   id_asc: true,
   name_desc: true,
   id_eq: 12345,
+  id_lt: 120,
+  or: [{ id_gt: 12, id_notInArray: [1, 2] }],
+  with_posts: true,
 }

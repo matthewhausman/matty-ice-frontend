@@ -56,16 +56,21 @@ type AndOrFilters<T extends MyTable> = {
       }
 }
 
-type NotFilter<T extends MyTable> = {
-  [Key in keyof AndOrFilters<T>]?: AndOrFilters<T>[Key] & {
-    not?: AndOrFilters<T>[Key]
-  }
+type AndOrMetaFilters<
+  T extends MyTable,
+  PrevFilter = AndOrFilters<T>,
+> = PrevFilter & {
+  and?: PrevFilter[]
+  or?: PrevFilter[]
 }
 
-type AndOrMetaFilters<T extends MyTable> = NotFilter<T> & {
-  and?: NotFilter<T>[]
-  or?: NotFilter<T>[]
-}
+// type NotFilter<T extends MyTable, PrevFilter = AndOrMetaFilters<T>> = {
+//   [Key in keyof PrevFilter]?: PrevFilter[Key] & {
+//     not?: PrevFilter[Key]
+//   }
+// } & {
+//   not?: PrevFilter
+// }
 
 type Schema = typeof schema
 
