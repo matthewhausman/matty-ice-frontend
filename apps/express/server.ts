@@ -8,6 +8,9 @@ const app = express()
 
 export type App = ReturnType<typeof express>
 
+db.query.users.findMany({
+  orderBy(fields, operators) {},
+})
 app.get('/cities', (req, res) => {})
 
 // Start http server
