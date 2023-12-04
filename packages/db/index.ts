@@ -43,10 +43,10 @@ export type User = InferSelectModel<typeof users>
 export const validateSearchInput = (
   searcher: Record<string, any>,
   tableName: keyof typeof db._.schema,
-) => {
+): void => {
+  const table = db._.schema[tableName]
   const keys = Object.keys(searcher)
-  const allowedKeys = Object.keys(db._.schema[tableName])
-  allowedKeys.push('with')
+  const tableColumns = Object.keys(table)
 
   for (const key of keys) {
     if (key === 'and' || key === 'not' || key === 'or') {
@@ -55,44 +55,49 @@ export const validateSearchInput = (
     }
     const parts = key.split('_')
 
-    if (parts.length > 2) throw Error('too many parts')
+    if (parts.length > 2) throw Error('Too many parts')
 
-    if (!allowedKeys.includes(parts[0])) {
-      throw Error(`key invalid prior to separator (${parts[0]})`)
+    if (tableColumns.includes(parts[0])) {
+      // col name is valid
+      switch (parts[1]) {
+        case 'eq':
+          const col = table.columns[parts[0]]
+          console.log(col)
+          if (typeof searcher[key] !== col.dataType) {
+            throw Error('Wrong type in filter')
+          }
+          break
+        case 'gt':
+          break
+        case 'gte':
+          break
+        case 'lt':
+          break
+        case 'lte':
+          break
+        case 'inArray':
+          break
+        case 'notInArray':
+          break
+        case 'isNull':
+          break
+        case 'isNotNull':
+          break
+        case 'asc':
+          break
+        case 'desc':
+          break
+        default:
+          throw Error('No match found prior to separator')
+      }
+    } else if ('with' === parts[0]) {
+      if (!db._.schema[tableName].relations[parts[1]]) {
+        throw Error(`key invalid after separator (with: ${parts[1]})`)
+      }
+
+      validateSearchInput(searcher[key], parts[1] as any)
     }
 
-    switch (parts[0]) {
-      case 'eq':
-        break
-      case 'gt':
-        break
-      case 'gte':
-        break
-      case 'lt':
-        break
-      case 'lte':
-        break
-      case 'inArray':
-        break
-      case 'notInArray':
-        break
-      case 'isNull':
-        break
-      case 'isNotNull':
-        break
-      case 'asc':
-        break
-      case 'desc':
-        break
-      case 'with':
-        if (!db._.schema[tableName].relations[parts[1]]) {
-          throw Error(`key invalid after separator (with: ${parts[1]})`)
-        }
-        break
-      default:
-        throw Error('No match found prior to separator')
-    }
-
-    validateSearchInput(searcher[key], tableName)
+    break
   }
 }
