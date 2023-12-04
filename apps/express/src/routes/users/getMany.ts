@@ -1,5 +1,10 @@
 import type { RequestHandler } from 'express'
-import { db, generateWhere, users } from '@matty-ice-app-template/db/index'
+import {
+  db,
+  generateWhere,
+  generateWith,
+  users,
+} from '@matty-ice-app-template/db/index'
 import {
   deserialize,
   validateSearchInput,
@@ -18,6 +23,9 @@ export const getManyUsers: RequestHandler = async (req, res) => {
     }
     db.query.users.findMany({
       where: generateWhere(searcher, users),
+      with: generateWith(searcher, users),
+      limit: searcher.limit,
+      offset: searcher.offset,
     })
   } catch (e) {
     console.error(e)

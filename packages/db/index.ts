@@ -59,3 +59,17 @@ export const generateWhere = <
   | undefined => {
   return undefined
 }
+
+export const generateWith = <
+  Searcher extends Record<string, any>,
+  T extends MyTable,
+>(
+  searcher: Searcher,
+  table: T,
+):
+  | Parameters<
+      RelationalQueryBuilder<F, F[T['_']['name']]>['findMany']
+    >[0]['with']
+  | undefined => {
+  return undefined
+}
