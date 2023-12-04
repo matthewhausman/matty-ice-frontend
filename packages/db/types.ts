@@ -1,6 +1,10 @@
-import { ExtractTableRelationsFromSchema, Table } from 'drizzle-orm'
+import {
+  ExtractTableRelationsFromSchema,
+  InferSelectModel,
+  Table,
+} from 'drizzle-orm'
 import { PgColumn } from 'drizzle-orm/pg-core'
-import { db, schema } from './index'
+import { db, schema, users } from './index'
 
 export type Prettify<T> = {
   [K in keyof T]: T[K]
@@ -55,7 +59,7 @@ type AndOrMetaFilters<
   or?: Prettify<Omit<AndOrMetaFilters<T>, 'or'>>[]
 }
 
-type Schema = typeof schema
+export type Schema = typeof schema
 
 export type GenerateSearcher<
   T extends MyTable,
@@ -72,3 +76,7 @@ export type GenerateSearcher<
     offset?: number
   }
 >
+
+export type User = InferSelectModel<typeof users>
+
+export type UsersSearcher = GenerateSearcher<typeof users>

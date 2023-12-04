@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { User, UsersSearcher } from '@matty-ice-app-template/db/index.ts'
-import { useRef, useState } from 'react'
+import { User, UsersSearcher } from '@matty-ice-app-template/db/types.ts'
+import { useRef } from 'react'
 
 /**
  * @function getReferenceKey
