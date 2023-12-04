@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { Pool } from 'pg'
 import { integer, pgTable, serial, text } from 'drizzle-orm/pg-core'
-import { relations } from 'drizzle-orm'
+import { InferSelectModel, relations } from 'drizzle-orm'
 import { GenerateSearcher } from './types'
 
 const pool = new Pool({
@@ -37,6 +37,8 @@ export const db = drizzle(pool, {
 } as const)
 
 export type UsersSearcher = GenerateSearcher<typeof users>
+
+export type User = InferSelectModel<typeof users>
 
 const obj: UsersSearcher = {
   id_asc: true,
