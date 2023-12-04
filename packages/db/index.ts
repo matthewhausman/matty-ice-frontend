@@ -44,7 +44,12 @@ const obj: T = {
   id_eq: 12345,
   id_gt: 123,
   or: [{ id_gt: 1000 }, { and: [{ id_eq: 123 }, { id_inArray: [1, 23, 34] }] }],
-  with_posts: true,
+  with_posts: {
+    or: [
+      { id_gt: 1000 },
+      { and: [{ id_eq: 123 }, { id_inArray: [1, 23, 34] }] },
+    ],
+  },
   limit: 20,
   offset: 40,
 }
