@@ -21,7 +21,7 @@ export const getManyUsers: RequestHandler = async (req, res) => {
       res.status(422).send()
       return
     }
-    db.query.users.findMany({
+    const data = await db.query.users.findMany({
       where: generateWhere(searcher, users),
       with: generateWith(searcher, users),
       limit: searcher.limit,
