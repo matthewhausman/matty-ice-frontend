@@ -10,8 +10,8 @@ export const getManyUsers: RequestHandler = async (req, res) => {
 
   try {
     const q: UsersSearcher = deserialize(req.query.q)
-    const valid = validateSearchInput(q, 'users')
-    if (!valid) res.status(422).send()
+    const searcher = validateSearchInput(q, 'users')
+    if (!searcher) res.status(422).send()
   } catch (e) {
     console.error(e)
     res.status(422).send()

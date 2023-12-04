@@ -42,11 +42,11 @@ export function deserialize(cachedString: string) {
   return deserializedCacheWithBigInts
 }
 
-export const validateSearchInput = (
-  searcher: Record<string, any>,
+export const validateSearchInput = <T extends Record<string, any>>(
+  searcher: T,
   tableName: keyof typeof db._.schema,
   levels?: number,
-): boolean => {
+): false | T => {
   const table = db._.schema[tableName]
   const tableColumns = Object.keys(table.columns)
   const searcherKeys = Object.keys(searcher)
@@ -159,5 +159,5 @@ export const validateSearchInput = (
     }
   }
 
-  return true
+  return searcher
 }
