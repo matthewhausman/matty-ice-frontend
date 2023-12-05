@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express'
-import { users } from '@matty-ice-app-template/db/index'
+import { db, eq, ne, users } from '@matty-ice-app-template/db/index'
 import {
   deserialize,
   validateSearchInput,
@@ -18,15 +18,27 @@ export const getManyUsers: RequestHandler = async (req, res) => {
       return
     }
 
-    console.log(generateWhere(searcher, users, []))
+    // const t = generateWhere(searcher, users, [])
 
-    // const data = await db.query.users.findMany({
-    //   where: generateWhere(searcher, users, []),
-    //   // with: generateWith(searcher, users),
-    //   // where: (tb, { lt }) => lt(tb.name, ''),
-    //   limit: searcher.limit,
-    //   offset: searcher.offset,
-    // })
+    const data = db.query.users
+      .findMany({
+        where: generateWhere(searcher, users, []),
+        // with: generateWith(searcher, users),
+        // where: (tb, { lt }) => lt(tb.name, ''),
+        limit: searcher.limit,
+        offset: searcher.offset,
+      })
+      .toSQL()
+    console.log(data)
+    // console.log(
+    //   db.query.users
+    //     .findMany({
+    //       where: (table, { or }) => {
+    //         return or(eq(table.id, 123), ne(table.id, 134))
+    //       },
+    //     })
+    //     .toSQL(),
+    // )
   } catch (e) {
     console.error(e)
     res.status(422).send()

@@ -16,6 +16,7 @@ import {
   asc,
   desc,
   ne,
+  SQL,
 } from '@matty-ice-app-template/db'
 
 const objectKeys = <T extends Record<string, any>>(obj: T) => {
@@ -35,18 +36,13 @@ export const generateWhereHelper = <
 >(
   searcher: Searcher,
   table: T,
-  filters: any[],
 ): readonly any[] => {
   const keys = objectKeys(searcher)
-
   const s = Reflect.ownKeys(table).find(
     key => key.toString() === 'Symbol(drizzle:Columns)',
   )
-
   const tableColumns = objectKeys(table[s])
-
   const curFilters: any[] = []
-
   for (let i = 0; i < keys.length; i += 1) {
     const key = keys[i]
 
@@ -61,14 +57,20 @@ export const generateWhereHelper = <
     if (key === 'and' || key === 'not' || key === 'or') {
       if (key === 'and') {
         const arr = searcher[key] as any[]
+        const cond = []
         arr.forEach(v => {
-          curFilters.push(and(...generateWhereHelper(v, table, curFilters)))
+          cond.push(...generateWhereHelper(v, table))
         })
+        curFilters.push(and(...cond))
+        continue
       } else if (key === 'or') {
         const arr = searcher[key] as any[]
+        const cond = []
         arr.forEach(v => {
-          curFilters.push(or(...generateWhereHelper(v, table, curFilters)))
+          cond.push(...generateWhereHelper(v, table))
         })
+        curFilters.push(or(...cond))
+        continue
       } else {
         // hold off on not for now
         continue
@@ -128,8 +130,8 @@ export const generateWhereHelper = <
       console.error('unimplemented', key)
     }
   }
-  filters.push(curFilters)
-  return filters
+
+  return curFilters
 }
 
 export const generateWhere = <
@@ -139,8 +141,8 @@ export const generateWhere = <
   searcher: Searcher,
   table: T,
   filters: any[],
-): Where<T> => {
-  const ops = generateWhereHelper(searcher, table, filters)
+): SQL => {
+  const ops = generateWhereHelper(searcher, table)
   const ret = and(...ops)
   return ret
 }
