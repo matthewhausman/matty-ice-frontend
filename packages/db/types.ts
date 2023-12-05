@@ -78,6 +78,13 @@ export type GenerateSearcher<
     columns?: {
       [K in keyof Columns]: boolean
     }
+    not?: AndOrMetaFilters<T> & {
+      [Key in keyof Schema as Key extends keyof R
+        ? `with_${string & Key}`
+        : never]?: Schema[Key] extends MyTable
+        ? GenerateSearcher<Schema[Key]> | boolean
+        : never
+    }
   }
 >
 

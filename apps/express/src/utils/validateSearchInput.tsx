@@ -53,9 +53,18 @@ export const validateSearchInput = <T extends Record<string, any>>(
 
   for (const key of searcherKeys) {
     if (key === 'and' || key === 'not' || key === 'or') {
-      for (const s of searcher[key]) {
-        const result = validateSearchInput(s, tableName, (levels ?? 0) + 1)
+      if (key === 'not') {
+        const result = validateSearchInput(
+          searcher[key],
+          tableName,
+          (levels ?? 0) + 1,
+        )
         if (!result) return false
+      } else {
+        for (const s of searcher[key]) {
+          const result = validateSearchInput(s, tableName, (levels ?? 0) + 1)
+          if (!result) return false
+        }
       }
       continue
     }

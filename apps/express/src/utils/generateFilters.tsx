@@ -73,7 +73,8 @@ export const generateWhereHelper = <
         curFilters.push(or(...cond))
         continue
       } else {
-        curFilters.push(not(searcher[key]))
+        const t: readonly any[] = generateWhereHelper(searcher[key], table)
+        curFilters.push(not(and(...t)))
         continue
       }
     } else if (tableColumns.includes(parts[0])) {
