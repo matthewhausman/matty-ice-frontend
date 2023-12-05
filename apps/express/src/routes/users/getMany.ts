@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express'
-import { and, db, users } from '@matty-ice-app-template/db/index'
+import { users } from '@matty-ice-app-template/db/index'
 import {
   deserialize,
   validateSearchInput,

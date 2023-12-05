@@ -45,10 +45,6 @@ export const generateWhereHelper = <
 
   const tableColumns = objectKeys(table[s])
 
-  // return []
-
-  console.log('SEARCHER: ', searcher)
-
   const curFilters: any[] = []
 
   for (let i = 0; i < keys.length; i += 1) {
