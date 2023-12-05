@@ -4,7 +4,7 @@ import {
   deserialize,
   validateSearchInput,
 } from '../../utils/validateSearchInput'
-import { generateWith, generateWhere } from '../../utils/generateFilters'
+import { generateWhere } from '../../utils/generateFilters'
 import { UsersSearcher } from '@matty-ice-app-template/db/types'
 
 export const getManyUsers: RequestHandler = async (req, res) => {
