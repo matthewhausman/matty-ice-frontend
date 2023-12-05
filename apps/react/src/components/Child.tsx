@@ -13,12 +13,12 @@ export default function Child() {
     //   { id_gt: 1000 },
     //   { and: [{ id_eq: 123 }, { id_inArray: [1, 23, 34] }] },
     // ],
-    with_posts: {},
     or: [
       { id_gt: 1000, id_lt: 10 },
-      // { and: [{ id_eq: 123 }, { id_inArray: [1, 23, 34] }] },
+      { and: [{ id_eq: 123 }, { id_inArray: [1, 23, 34] }] },
     ],
     and: [{ id_gt: 1000, id_lt: 10 }],
+
     limit: 20,
   })
   return <></>

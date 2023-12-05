@@ -17,6 +17,7 @@ import {
   desc,
   ne,
   SQL,
+  not,
 } from '@matty-ice-app-template/db'
 
 const objectKeys = <T extends Record<string, any>>(obj: T) => {
@@ -67,12 +68,12 @@ export const generateWhereHelper = <
         const arr = searcher[key] as any[]
         const cond = []
         arr.forEach(v => {
-          cond.push(...generateWhereHelper(v, table))
+          cond.push(and(...generateWhereHelper(v, table)))
         })
         curFilters.push(or(...cond))
         continue
       } else {
-        // hold off on not for now
+        curFilters.push(not(searcher[key]))
         continue
       }
     } else if (tableColumns.includes(parts[0])) {

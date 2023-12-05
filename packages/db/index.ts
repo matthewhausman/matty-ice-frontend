@@ -2,12 +2,13 @@ import { drizzle as d } from 'drizzle-orm/node-postgres'
 import pg from 'pg'
 import { integer, pgTable, serial, text } from 'drizzle-orm/pg-core'
 import { relations, ExtractTablesWithRelations } from 'drizzle-orm'
-import { MyTable, Schema } from './types'
+import { Schema } from './types'
 export { type RelationalQueryBuilder } from 'drizzle-orm/pg-core/query-builders/query'
 export {
   type SQL,
   eq,
   ne,
+  not,
   lt,
   lte,
   gt,
