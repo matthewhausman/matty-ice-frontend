@@ -24,13 +24,6 @@ const objectKeys = <T extends Record<string, any>>(obj: T) => {
   return Object.keys(obj) as (keyof T)[]
 }
 
-type Where<T extends MyTable> = Parameters<
-  RelationalQueryBuilder<
-    SchemaRelations,
-    SchemaRelations[T['_']['name']]
-  >['findMany']
->[0]['where']
-
 export const generateWhereHelper = <
   Searcher extends Record<string, any>,
   T extends MyTable,
