@@ -1,4 +1,4 @@
-import { db, eq, users } from '@matty-ice-app-template/db'
+import { db } from '@matty-ice-app-template/db'
 
 const findAndReplace = (
   cacheRef: any,

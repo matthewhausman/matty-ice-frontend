@@ -62,16 +62,12 @@ export const generateWhereHelper = <
       if (key === 'and') {
         const arr = searcher[key] as any[]
         arr.forEach(v => {
-          curFilters.push(
-            and(...generateWhereHelper(searcher[key], table, curFilters)),
-          )
+          curFilters.push(and(...generateWhereHelper(v, table, curFilters)))
         })
       } else if (key === 'or') {
         const arr = searcher[key] as any[]
         arr.forEach(v => {
-          curFilters.push(
-            or(...generateWhereHelper(searcher[key], table, curFilters)),
-          )
+          curFilters.push(or(...generateWhereHelper(v, table, curFilters)))
         })
       } else {
         // hold off on not for now

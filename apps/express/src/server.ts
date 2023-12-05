@@ -2,6 +2,7 @@ import express from 'express'
 import { getManyUsers } from './routes/users/getMany'
 // Constants
 import cors from 'cors'
+
 const port = process.env.PORT || 5174
 
 // Create http server
