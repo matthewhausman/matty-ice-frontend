@@ -1,4 +1,4 @@
-import { db } from '@matty-ice-app-template/db'
+import { db, eq, users } from '@matty-ice-app-template/db'
 
 const findAndReplace = (
   cacheRef: any,
@@ -76,6 +76,11 @@ export const validateSearchInput = <T extends Record<string, any>>(
       const col = table.columns[parts[0]]
 
       switch (parts[1]) {
+        case 'ne':
+          if (typeof searcher[key] !== col.dataType) {
+            return false
+          }
+          break
         case 'eq':
           if (typeof searcher[key] !== col.dataType) {
             return false

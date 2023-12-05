@@ -4,6 +4,23 @@ import { integer, pgTable, serial, text } from 'drizzle-orm/pg-core'
 import { relations, ExtractTablesWithRelations } from 'drizzle-orm'
 import { MyTable, Schema } from './types'
 export { type RelationalQueryBuilder } from 'drizzle-orm/pg-core/query-builders/query'
+export {
+  type SQL,
+  eq,
+  ne,
+  lt,
+  lte,
+  gt,
+  gte,
+  or,
+  and,
+  inArray,
+  notInArray,
+  isNotNull,
+  isNull,
+  asc,
+  desc,
+} from 'drizzle-orm'
 
 const pool = new pg.Pool({
   host: '127.0.0.1',
