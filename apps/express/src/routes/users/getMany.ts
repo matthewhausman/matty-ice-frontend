@@ -20,13 +20,13 @@ export const getManyUsers: RequestHandler = async (req, res) => {
 
     console.log(generateWhere(searcher, users, []))
 
-    const data = await db.query.users.findMany({
-      where: generateWhere(searcher, users, []),
-      // with: generateWith(searcher, users),
-      // where: (tb, { lt }) => lt(tb.name, ''),
-      limit: searcher.limit,
-      offset: searcher.offset,
-    })
+    // const data = await db.query.users.findMany({
+    //   where: generateWhere(searcher, users, []),
+    //   // with: generateWith(searcher, users),
+    //   // where: (tb, { lt }) => lt(tb.name, ''),
+    //   limit: searcher.limit,
+    //   offset: searcher.offset,
+    // })
   } catch (e) {
     console.error(e)
     res.status(422).send()

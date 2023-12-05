@@ -1,11 +1,8 @@
 import { MyTable } from '@matty-ice-app-template/db/types'
 import {
   RelationalQueryBuilder,
-  SQL,
   SchemaRelations,
-  db,
   eq,
-  ne,
   lt,
   lte,
   gt,
@@ -18,6 +15,7 @@ import {
   isNull,
   asc,
   desc,
+  ne,
 } from '@matty-ice-app-template/db'
 
 const objectKeys = <T extends Record<string, any>>(obj: T) => {
@@ -34,7 +32,6 @@ type Where<T extends MyTable> = Parameters<
 export const generateWhereHelper = <
   Searcher extends Record<string, any>,
   T extends MyTable,
-  W = Where<T>,
 >(
   searcher: Searcher,
   table: T,
@@ -42,7 +39,15 @@ export const generateWhereHelper = <
 ): readonly any[] => {
   const keys = objectKeys(searcher)
 
-  const tableColumns = objectKeys(table._.columns)
+  const s = Reflect.ownKeys(table).find(
+    key => key.toString() === 'Symbol(drizzle:Columns)',
+  )
+
+  const tableColumns = objectKeys(table[s])
+
+  // return []
+
+  console.log('SEARCHER: ', searcher)
 
   const curFilters: any[] = []
 
@@ -51,37 +56,35 @@ export const generateWhereHelper = <
 
     if (typeof key !== 'string') throw Error('key is not type string')
 
-    if (key === 'with' || key === 'limit' || key === 'offset') {
+    if (key === 'limit' || key === 'offset') {
       continue
     }
+
+    const parts = key.split('_')
 
     if (key === 'and' || key === 'not' || key === 'or') {
       if (key === 'and') {
         const arr = searcher[key] as any[]
         arr.forEach(v => {
           curFilters.push(
-            and(...generateWhereHelper(searcher, table, curFilters)),
+            and(...generateWhereHelper(searcher[key], table, curFilters)),
           )
         })
       } else if (key === 'or') {
         const arr = searcher[key] as any[]
         arr.forEach(v => {
           curFilters.push(
-            or(...generateWhereHelper(searcher, table, curFilters)),
+            or(...generateWhereHelper(searcher[key], table, curFilters)),
           )
         })
       } else {
         // hold off on not for now
         continue
       }
-    }
-
-    const parts = key.split('_')
-
-    if (tableColumns.includes(parts[0])) {
+    } else if (tableColumns.includes(parts[0])) {
       switch (parts[1]) {
         case 'ne':
-          curFilters.push(eq(table[parts[0]], searcher[key]))
+          curFilters.push(ne(table[parts[0]], searcher[key]))
           break
         case 'eq':
           curFilters.push(eq(table[parts[0]], searcher[key]))
@@ -127,18 +130,19 @@ export const generateWhereHelper = <
         default:
           throw Error()
       }
+    } else if (parts[0] === 'with') {
+      continue
     } else {
       console.error('unimplemented', key)
-      continue
     }
   }
-  return curFilters
+  filters.push(curFilters)
+  return filters
 }
 
 export const generateWhere = <
   Searcher extends Record<string, any>,
   T extends MyTable,
-  W = Where<T>,
 >(
   searcher: Searcher,
   table: T,

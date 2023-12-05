@@ -1,4 +1,4 @@
-import { drizzle } from 'drizzle-orm/node-postgres'
+import { drizzle as d } from 'drizzle-orm/node-postgres'
 import pg from 'pg'
 import { integer, pgTable, serial, text } from 'drizzle-orm/pg-core'
 import { relations, ExtractTablesWithRelations } from 'drizzle-orm'
@@ -21,6 +21,8 @@ export {
   asc,
   desc,
 } from 'drizzle-orm'
+
+export const drizzle = d
 
 const pool = new pg.Pool({
   host: '127.0.0.1',
