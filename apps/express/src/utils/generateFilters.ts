@@ -60,7 +60,6 @@ export const generateWhereHelper = <
   const curFilters: any[] = []
   for (let i = 0; i < keys.length; i += 1) {
     const key = keys[i]
-    console.log('gay', key)
 
     if (typeof key !== 'string') throw Error('key is not type string')
 
