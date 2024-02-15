@@ -19,6 +19,7 @@ import {
   SQL,
   not,
   db,
+  schema,
 } from '@matty-ice-app-template/db'
 
 const objectKeys = <T extends Record<string, any>>(obj: T) => {
@@ -28,25 +29,31 @@ const objectKeys = <T extends Record<string, any>>(obj: T) => {
 export const generateWhereHelper = <
   S extends Record<string, any>,
   T extends MyTable,
->(
-  searcher: S,
-  table: T,
-): {
-  where: readonly any[]
-  with:
+  W =
     | Parameters<
         RelationalQueryBuilder<
           SchemaRelations,
           SchemaRelations[T['_']['name']]
         >['findMany']
       >[0]['with']
-    | undefined
+    | undefined,
+>(
+  searcher: S,
+  table: T,
+): {
+  where: readonly any[]
+  with: W
 } => {
   const keys = objectKeys(searcher)
+
+  console.log(Reflect.ownKeys(table))
+
   const s = Reflect.ownKeys(table).find(
     key => key.toString() === 'Symbol(drizzle:Columns)',
   )
+
   const tableColumns = objectKeys(table[s])
+
   const curFilters: any[] = []
 
   let withArg: Record<string, any> = {}
@@ -144,19 +151,20 @@ export const generateWhereHelper = <
       const withoutFirst = key.split('_')
       withoutFirst.shift()
       const tableName = withoutFirst.join('_')
+
       withArg = {
+        ...withArg,
         [tableName as keyof typeof db._.schema]:
           typeof searcher[key] === 'boolean'
             ? true
-            : generateWhere(searcher[key], db._.schema[tableName], []),
+            : generateWhere(searcher[key], schema[tableName], []),
       }
-      continue
     } else {
       console.error('unimplemented', key)
     }
   }
 
-  return { where: curFilters, with: withArg }
+  return { where: curFilters, with: withArg as W }
 }
 
 export const generateWhere = <
@@ -179,18 +187,4 @@ export const generateWhere = <
   const ops = generateWhereHelper(searcher, table)
   const ret = and(...ops.where)
   return { where: ret, with: ops.with as With }
-}
-
-export const generateWith = <S extends Record<string, any>, T extends MyTable>(
-  withArg: S,
-  table: T,
-):
-  | Parameters<
-      RelationalQueryBuilder<
-        SchemaRelations,
-        SchemaRelations[T['_']['name']]
-      >['findMany']
-    >[0]['with']
-  | undefined => {
-  return undefined
 }

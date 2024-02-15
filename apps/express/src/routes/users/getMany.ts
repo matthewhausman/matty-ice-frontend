@@ -22,6 +22,8 @@ export const getManyUsers: RequestHandler = async (req, res) => {
 
     const r = generateWhere(searcher, users, [])
 
+    console.log(r)
+
     const data = db.query.users
       .findMany({
         where: r.where,
@@ -30,6 +32,8 @@ export const getManyUsers: RequestHandler = async (req, res) => {
         offset: searcher.offset,
       })
       .toSQL()
+
+    console.log(data)
   } catch (e) {
     console.error(e)
     res.status(422).send()
