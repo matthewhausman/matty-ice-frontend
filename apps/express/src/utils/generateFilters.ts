@@ -101,47 +101,47 @@ export const generateWhereHelper = <
     if (tableColumns.includes(colName)) {
       switch (parts[parts.length - 1]) {
         case 'ne':
-          curFilters.push(ne(table[parts[0]], searcher[key]))
+          curFilters.push(ne(table[colName], searcher[key]))
           break
         case 'eq':
-          curFilters.push(eq(table[parts[0]], searcher[key]))
+          curFilters.push(eq(table[colName], searcher[key]))
           break
         case 'gt':
-          curFilters.push(gt(table[parts[0]], searcher[key]))
+          curFilters.push(gt(table[colName], searcher[key]))
           break
         case 'gte':
-          curFilters.push(gte(table[parts[0]], searcher[key]))
+          curFilters.push(gte(table[colName], searcher[key]))
           break
         case 'lt':
-          curFilters.push(lt(table[parts[0]], searcher[key]))
+          curFilters.push(lt(table[colName], searcher[key]))
           break
         case 'lte':
-          curFilters.push(lte(table[parts[0]], searcher[key]))
+          curFilters.push(lte(table[colName], searcher[key]))
           break
         case 'inArray':
-          curFilters.push(inArray(table[parts[0]], searcher[key]))
+          curFilters.push(inArray(table[colName], searcher[key]))
           break
         case 'notInArray':
-          curFilters.push(notInArray(table[parts[0]], searcher[key]))
+          curFilters.push(notInArray(table[colName], searcher[key]))
           break
         case 'isNull':
           if (searcher[key]) {
-            curFilters.push(isNull(table[parts[0]]))
+            curFilters.push(isNull(table[colName]))
           }
           break
         case 'isNotNull':
           if (searcher[key]) {
-            curFilters.push(isNotNull(table[parts[0]]))
+            curFilters.push(isNotNull(table[colName]))
           }
           break
         case 'asc':
           if (searcher[key]) {
-            curFilters.push(asc(table[parts[0]]))
+            curFilters.push(asc(table[colName]))
           }
           break
         case 'desc':
           if (searcher[key]) {
-            curFilters.push(desc(table[parts[0]]))
+            curFilters.push(desc(table[colName]))
           }
           break
         default:
@@ -152,6 +152,7 @@ export const generateWhereHelper = <
       withoutFirst.shift()
       const tableName = withoutFirst.join('_')
 
+      console.log(searcher[key])
       withArg = {
         ...withArg,
         [tableName as keyof typeof db._.schema]:
