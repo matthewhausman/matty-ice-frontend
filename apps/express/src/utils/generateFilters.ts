@@ -133,14 +133,14 @@ export const generateWhereHelper = <
           }
           break
         case 'asc':
-          if (searcher[key]) {
-            curFilters.push(asc(table[colName]))
-          }
+          // if (searcher[key]) {
+          //   curFilters.push(asc(table[colName]))
+          // }
           break
         case 'desc':
-          if (searcher[key]) {
-            curFilters.push(desc(table[colName]))
-          }
+          // if (searcher[key]) {
+          //   curFilters.push(desc(table[colName]))
+          // }
           break
         default:
           throw Error()

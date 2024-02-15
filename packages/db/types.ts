@@ -16,44 +16,47 @@ export type MyTable = Table & { _: Table['_'] & { name: keyof DBQuery } }
 
 type BinaryFilters<
   T extends MyTable,
+  GetSorts extends boolean = true,
   Columns extends Record<string, PgColumn> = T['_']['columns'],
-> = {
-  [Column in keyof Columns as `${string &
-    Column}_eq`]?: Columns[Column]['_']['data']
-} & {
-  [Column in keyof Columns as `${string &
-    Column}_gt`]?: Columns[Column]['_']['data']
-} & {
-  [Column in keyof Columns as `${string &
-    Column}_gte`]?: Columns[Column]['_']['data']
-} & {
-  [Column in keyof Columns as `${string &
-    Column}_lt`]?: Columns[Column]['_']['data']
-} & {
-  [Column in keyof Columns as `${string &
-    Column}_lte`]?: Columns[Column]['_']['data']
-} & {
-  [Column in keyof Columns as `${string &
-    Column}_ne`]?: Columns[Column]['_']['data']
-} & {
-  [Column in keyof Columns as `${string &
-    Column}_inArray`]?: Columns[Column]['_']['data'][]
-} & {
-  [Column in keyof Columns as `${string &
-    Column}_notInArray`]?: Columns[Column]['_']['data'][]
-} & {
-  [Column in keyof Columns as `${string & Column}_isNull`]?: boolean
-} & {
-  [Column in keyof Columns as `${string & Column}_isNotNull`]?: boolean
-} & {
-  [Column in keyof Columns as `${string & Column}_asc`]?: boolean
-} & {
-  [Column in keyof Columns as `${string & Column}_desc`]?: boolean
-}
+> = GetSorts extends true
+  ? {
+      [Column in keyof Columns as `${string & Column}_asc`]?: boolean
+    } & {
+      [Column in keyof Columns as `${string & Column}_desc`]?: boolean
+    }
+  : {
+      [Column in keyof Columns as `${string &
+        Column}_eq`]?: Columns[Column]['_']['data']
+    } & {
+      [Column in keyof Columns as `${string &
+        Column}_gt`]?: Columns[Column]['_']['data']
+    } & {
+      [Column in keyof Columns as `${string &
+        Column}_gte`]?: Columns[Column]['_']['data']
+    } & {
+      [Column in keyof Columns as `${string &
+        Column}_lt`]?: Columns[Column]['_']['data']
+    } & {
+      [Column in keyof Columns as `${string &
+        Column}_lte`]?: Columns[Column]['_']['data']
+    } & {
+      [Column in keyof Columns as `${string &
+        Column}_ne`]?: Columns[Column]['_']['data']
+    } & {
+      [Column in keyof Columns as `${string &
+        Column}_inArray`]?: Columns[Column]['_']['data'][]
+    } & {
+      [Column in keyof Columns as `${string &
+        Column}_notInArray`]?: Columns[Column]['_']['data'][]
+    } & {
+      [Column in keyof Columns as `${string & Column}_isNull`]?: boolean
+    } & {
+      [Column in keyof Columns as `${string & Column}_isNotNull`]?: boolean
+    }
 
 type AndOrMetaFilters<
   T extends MyTable,
-  PrevFilter = BinaryFilters<T>,
+  PrevFilter = BinaryFilters<T, false>,
 > = PrevFilter & {
   and?: Prettify<Omit<AndOrMetaFilters<T>, 'and'>>[]
   or?: Prettify<Omit<AndOrMetaFilters<T>, 'or'>>[]
@@ -85,7 +88,7 @@ export type GenerateSearcher<
         ? GenerateSearcher<Schema[Key]> | boolean
         : never
     }
-  }
+  } & BinaryFilters<T, true>
 >
 
 export type User = InferSelectModel<typeof users>
