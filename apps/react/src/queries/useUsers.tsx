@@ -146,6 +146,7 @@ export default function useUsers(vars: Omit<UsersSearcher, 'offset'>) {
           'Content-Type': 'application/json',
         },
       })
+
       return { data: [{ id: 2, name: '123' }], total: 100 } as {
         data: User[]
         total: number
