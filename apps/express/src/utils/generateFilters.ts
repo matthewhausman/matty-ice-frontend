@@ -13,8 +13,6 @@ import {
   notInArray,
   isNotNull,
   isNull,
-  asc,
-  desc,
   ne,
   SQL,
   not,
