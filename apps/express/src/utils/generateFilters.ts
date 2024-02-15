@@ -24,6 +24,27 @@ const objectKeys = <T extends Record<string, any>>(obj: T) => {
   return Object.keys(obj) as (keyof T)[]
 }
 
+const checkParts = ({
+  parts,
+  tableColumns,
+}: {
+  parts: string[]
+  tableColumns: (string | number | Symbol)[]
+}): boolean => {
+  const s = parts.join('_')
+
+  return (
+    tableColumns.includes(s) ||
+    checkParts({
+      parts: (function () {
+        parts.pop()
+        return parts
+      })(),
+      tableColumns: tableColumns,
+    })
+  )
+}
+
 export const generateWhereHelper = <
   Searcher extends Record<string, any>,
   T extends MyTable,
@@ -39,6 +60,7 @@ export const generateWhereHelper = <
   const curFilters: any[] = []
   for (let i = 0; i < keys.length; i += 1) {
     const key = keys[i]
+    console.log('gay', key)
 
     if (typeof key !== 'string') throw Error('key is not type string')
 
@@ -48,7 +70,7 @@ export const generateWhereHelper = <
 
     const parts = key.split('_')
 
-    if (key === 'and' || key === 'not' || key === 'or') {
+    if (['and', 'not', 'or'].includes(key)) {
       if (key === 'and') {
         const arr = searcher[key] as any[]
         const cond = []
@@ -56,7 +78,6 @@ export const generateWhereHelper = <
           cond.push(...generateWhereHelper(v, table))
         })
         curFilters.push(and(...cond))
-        continue
       } else if (key === 'or') {
         const arr = searcher[key] as any[]
         const cond = []
@@ -64,14 +85,19 @@ export const generateWhereHelper = <
           cond.push(and(...generateWhereHelper(v, table)))
         })
         curFilters.push(or(...cond))
-        continue
       } else {
         const t: readonly any[] = generateWhereHelper(searcher[key], table)
         curFilters.push(not(and(...t)))
-        continue
       }
-    } else if (tableColumns.includes(parts[0])) {
-      switch (parts[1]) {
+      continue
+    }
+
+    const withoutLast = key.split('_')
+    withoutLast.pop()
+    const colName = withoutLast.join('_')
+
+    if (tableColumns.includes(colName)) {
+      switch (parts[parts.length - 1]) {
         case 'ne':
           curFilters.push(ne(table[parts[0]], searcher[key]))
           break

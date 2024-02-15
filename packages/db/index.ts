@@ -36,6 +36,7 @@ const pool = new pg.Pool({
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
+  another_value: text('another_value').notNull(),
 })
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -45,10 +46,10 @@ export const usersRelations = relations(users, ({ many }) => ({
 export const posts = pgTable('posts', {
   id: serial('id').primaryKey(),
   content: text('content').notNull(),
-  authorId: integer('author_id').notNull(),
+  author_id: integer('author_id').notNull(),
 })
 export const postsRelations = relations(posts, ({ one }) => ({
-  author: one(users, { fields: [posts.authorId], references: [users.id] }),
+  author: one(users, { fields: [posts.author_id], references: [users.id] }),
 }))
 
 export const schema = { users, posts, usersRelations, postsRelations } as const

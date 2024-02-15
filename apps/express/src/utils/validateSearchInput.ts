@@ -78,13 +78,15 @@ export const validateSearchInput = <T extends Record<string, any>>(
 
     const parts = key.split('_')
 
-    if (parts.length > 2) return false
+    const withoutLast = key.split('_')
+    withoutLast.pop()
+    const colName = withoutLast.join('_')
 
-    if (tableColumns.includes(parts[0])) {
+    if (tableColumns.includes(colName)) {
       // col name is valid
-      const col = table.columns[parts[0]]
+      const col = table.columns[colName]
 
-      switch (parts[1]) {
+      switch (parts[parts.length - 1]) {
         case 'ne':
           if (typeof searcher[key] !== col.dataType) {
             return false
