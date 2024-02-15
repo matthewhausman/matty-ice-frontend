@@ -18,46 +18,39 @@ import {
   ne,
   SQL,
   not,
+  db,
 } from '@matty-ice-app-template/db'
 
 const objectKeys = <T extends Record<string, any>>(obj: T) => {
   return Object.keys(obj) as (keyof T)[]
 }
 
-const checkParts = ({
-  parts,
-  tableColumns,
-}: {
-  parts: string[]
-  tableColumns: (string | number | Symbol)[]
-}): boolean => {
-  const s = parts.join('_')
-
-  return (
-    tableColumns.includes(s) ||
-    checkParts({
-      parts: (function () {
-        parts.pop()
-        return parts
-      })(),
-      tableColumns: tableColumns,
-    })
-  )
-}
-
 export const generateWhereHelper = <
-  Searcher extends Record<string, any>,
+  S extends Record<string, any>,
   T extends MyTable,
 >(
-  searcher: Searcher,
+  searcher: S,
   table: T,
-): readonly any[] => {
+): {
+  where: readonly any[]
+  with:
+    | Parameters<
+        RelationalQueryBuilder<
+          SchemaRelations,
+          SchemaRelations[T['_']['name']]
+        >['findMany']
+      >[0]['with']
+    | undefined
+} => {
   const keys = objectKeys(searcher)
   const s = Reflect.ownKeys(table).find(
     key => key.toString() === 'Symbol(drizzle:Columns)',
   )
   const tableColumns = objectKeys(table[s])
   const curFilters: any[] = []
+
+  let withArg: Record<string, any> = {}
+
   for (let i = 0; i < keys.length; i += 1) {
     const key = keys[i]
 
@@ -74,18 +67,21 @@ export const generateWhereHelper = <
         const arr = searcher[key] as any[]
         const cond = []
         arr.forEach(v => {
-          cond.push(...generateWhereHelper(v, table))
+          cond.push(...generateWhereHelper(v, table).where)
         })
         curFilters.push(and(...cond))
       } else if (key === 'or') {
         const arr = searcher[key] as any[]
         const cond = []
         arr.forEach(v => {
-          cond.push(and(...generateWhereHelper(v, table)))
+          cond.push(and(...generateWhereHelper(v, table).where))
         })
         curFilters.push(or(...cond))
       } else {
-        const t: readonly any[] = generateWhereHelper(searcher[key], table)
+        const t: readonly any[] = generateWhereHelper(
+          searcher[key],
+          table,
+        ).where
         curFilters.push(not(and(...t)))
       }
       continue
@@ -145,33 +141,48 @@ export const generateWhereHelper = <
           throw Error()
       }
     } else if (parts[0] === 'with') {
+      const withoutFirst = key.split('_')
+      withoutFirst.shift()
+      const tableName = withoutFirst.join('_')
+      withArg = {
+        [tableName as keyof typeof db._.schema]:
+          typeof searcher[key] === 'boolean'
+            ? true
+            : generateWhere(searcher[key], db._.schema[tableName], []),
+      }
       continue
     } else {
       console.error('unimplemented', key)
     }
   }
 
-  return curFilters
+  return { where: curFilters, with: withArg }
 }
 
 export const generateWhere = <
   Searcher extends Record<string, any>,
   T extends MyTable,
+  With = Parameters<
+    RelationalQueryBuilder<
+      SchemaRelations,
+      SchemaRelations[T['_']['name']]
+    >['findMany']
+  >[0]['with'],
 >(
   searcher: Searcher,
   table: T,
   filters: any[],
-): SQL => {
+): {
+  where: SQL
+  with: With
+} => {
   const ops = generateWhereHelper(searcher, table)
-  const ret = and(...ops)
-  return ret
+  const ret = and(...ops.where)
+  return { where: ret, with: ops.with as With }
 }
 
-export const generateWith = <
-  Searcher extends Record<string, any>,
-  T extends MyTable,
->(
-  searcher: Searcher,
+export const generateWith = <S extends Record<string, any>, T extends MyTable>(
+  withArg: S,
   table: T,
 ):
   | Parameters<

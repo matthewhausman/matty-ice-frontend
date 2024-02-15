@@ -12,6 +12,9 @@ export default function Child() {
       ],
       and: [{ id_gt: 1000, id_lt: 10 }],
     },
+    with_posts: {
+      author_id_lte: 123,
+    },
   })
   return <></>
 }
