@@ -46,8 +46,6 @@ export const generateWhereHelper = <
 } => {
   const keys = objectKeys(searcher)
 
-  console.log(Reflect.ownKeys(table))
-
   const s = Reflect.ownKeys(table).find(
     key => key.toString() === 'Symbol(drizzle:Columns)',
   )
@@ -152,7 +150,6 @@ export const generateWhereHelper = <
       withoutFirst.shift()
       const tableName = withoutFirst.join('_')
 
-      console.log(searcher[key])
       withArg = {
         ...withArg,
         [tableName as keyof typeof db._.schema]:
