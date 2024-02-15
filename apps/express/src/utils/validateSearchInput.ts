@@ -161,7 +161,10 @@ export const validateSearchInput = <T extends Record<string, any>>(
           return false
       }
     } else if ('with' === parts[0]) {
-      if (!db._.schema[tableName].relations[parts[1]]) {
+      const withoutFirst = key.split('_')
+      withoutFirst.shift()
+      const colName = withoutFirst.join('_')
+      if (!db._.schema[tableName].relations[colName]) {
         return false
       }
       const result = validateSearchInput(
