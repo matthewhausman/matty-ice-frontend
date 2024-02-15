@@ -130,8 +130,8 @@ export function serialize(
 export default function useUsers(vars: Omit<UsersSearcher, 'offset'>) {
   const page = useRef(1)
   return useInfiniteQuery({
-    queryKey: ['users', { ...vars }] as const,
-    queryFn: async ({ queryKey }) => {
+    queryKey: ['users', { ...vars } satisfies UsersSearcher] as const,
+    queryFn: async ({ queryKey, pageParam }) => {
       const usersSearcher = queryKey[1]
 
       const url = new URL(
