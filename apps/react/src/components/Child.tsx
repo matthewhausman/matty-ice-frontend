@@ -1,10 +1,10 @@
-'use client'
-
 import useUsers from '../queries/useUsers'
 
 export default function Child() {
   const usersQuery2 = useUsers({
     limit: 20,
+    id_asc: false,
+    id_desc: true,
     not: {
       or: [
         { id_gt: 1000, id_lt: 10 },
